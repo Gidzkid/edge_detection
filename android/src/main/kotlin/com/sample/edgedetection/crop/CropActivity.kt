@@ -2,6 +2,7 @@ package com.sample.edgedetection.crop
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -9,9 +10,12 @@ import android.view.View
 import android.widget.ImageView
 import com.sample.edgedetection.EdgeDetectionHandler
 import com.sample.edgedetection.R
+import com.sample.edgedetection.SourceManager
 import com.sample.edgedetection.base.BaseActivity
 import com.sample.edgedetection.view.PaperRectangle
-import kotlinx.android.synthetic.main.activity_crop.*
+import kotlinx.android.synthetic.main.activity_crop.paper
+import kotlinx.android.synthetic.main.activity_crop.paper_rect
+import kotlinx.android.synthetic.main.activity_crop.picture_cropped
 
 
 class CropActivity : BaseActivity(), ICropView.Proxy {
@@ -29,7 +33,30 @@ class CropActivity : BaseActivity(), ICropView.Proxy {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var width = 0f;
+        var height = 0f;
+        var ratio = 0f;
+
+        if(SourceManager.pic != null) {
+
+            width = SourceManager.pic!!.width().toFloat();
+            height = SourceManager.pic!!.height().toFloat();
+            ratio = width / height;
+        }
+
+
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val screenHeight = displayMetrics.heightPixels
+        val screenWidth = displayMetrics.widthPixels
+        if(ratio != 0f) {
+            paper.layoutParams.height = (screenWidth/ratio).toInt();
+            getPaperRect().layoutParams.height = (screenWidth/ratio).toInt();
+        }
+
         paper.post {
+
             //we have to initialize everything in post when the view has been drawn and we have the actual height and width of the whole view
             mPresenter.onViewsReady(paper.width, paper.height)
         }
