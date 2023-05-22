@@ -95,11 +95,11 @@ class ScanPresenter constructor(
         shutted = false
         Log.i(TAG, "try to focus")
 
-        mCamera?.autoFocus { b, _ ->
-            Log.i(TAG, "focus result: $b")
-            mCamera?.enableShutterSound(false)
+//        mCamera?.autoFocus { b, _ ->
+//            Log.i(TAG, "focus result: $b")
+//            mCamera?.enableShutterSound(false)
             mCamera?.takePicture(null, null, this)
-        }
+//        }
 
     }
 
