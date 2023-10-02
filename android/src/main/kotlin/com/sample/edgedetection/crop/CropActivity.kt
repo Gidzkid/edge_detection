@@ -13,10 +13,6 @@ import com.sample.edgedetection.R
 import com.sample.edgedetection.SourceManager
 import com.sample.edgedetection.base.BaseActivity
 import com.sample.edgedetection.view.PaperRectangle
-import kotlinx.android.synthetic.main.activity_crop.paper
-import kotlinx.android.synthetic.main.activity_crop.paper_rect
-import kotlinx.android.synthetic.main.activity_crop.picture_cropped
-
 
 class CropActivity : BaseActivity(), ICropView.Proxy {
 
@@ -51,19 +47,14 @@ class CropActivity : BaseActivity(), ICropView.Proxy {
         val screenHeight = displayMetrics.heightPixels
         val screenWidth = displayMetrics.widthPixels
         if(ratio != 0f) {
-            paper.layoutParams.height = (screenWidth/ratio).toInt();
+            findViewById<View>(R.id.paper).layoutParams.height = (screenWidth/ratio).toInt();
             getPaperRect().layoutParams.height = (screenWidth/ratio).toInt();
         }
 
         findViewById<View>(R.id.paper).post {
             // we have to initialize everything in post when the view has been drawn and we have the actual height and width of the whole view
-            mPresenter.onViewsReady(
-                findViewById<View>(R.id.paper).width,
-                findViewById<View>(R.id.paper).height
-            )
-
+            mPresenter.onViewsReady(findViewById<View>(R.id.paper).width, findViewById<View>(R.id.paper).height)
         }
-
     }
 
     override fun provideContentViewId(): Int = R.layout.activity_crop
@@ -125,7 +116,7 @@ class CropActivity : BaseActivity(), ICropView.Proxy {
                 Log.e(TAG, "Saved touched!")
                 item.isEnabled = false
                 mPresenter.save()
-                setResult(Activity.RESULT_OK)
+                setResult(RESULT_OK)
                 System.gc()
                 finish()
                 return true
